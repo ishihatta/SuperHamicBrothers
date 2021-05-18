@@ -222,17 +222,17 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
 
     override fun surfaceCreated(surfaceHolder: SurfaceHolder) {
         // サーフェスが作られると呼ばれる
-        when (state) {
-            State.INITIALIZING -> Unit
-            State.PLAYING -> onNextFrame.run()
-            State.GAME_OVER -> repaint()
-        }
+        if (state == State.PLAYING) onNextFrame.run()
     }
 
     override fun surfaceChanged(surfaceHolder: SurfaceHolder, format: Int, width: Int, height: Int) {
         // 表示領域に変更があると呼ばれる
         // (最初にも1回呼ばれる)
-        if (state == State.INITIALIZING) startGame()
+        when (state) {
+            State.INITIALIZING -> startGame()
+            State.PLAYING -> Unit
+            State.GAME_OVER -> repaint()
+        }
     }
 
     override fun surfaceDestroyed(surfaceHolder: SurfaceHolder) {
